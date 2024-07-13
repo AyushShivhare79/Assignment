@@ -7,13 +7,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function ({ label }: { label: string }) {
+export default function ({
+  label,
+  onChange,
+}: {
+  label: string;
+  onChange: any;
+}) {
   return (
     <>
       <div>
         <Label htmlFor="email">{label}</Label>
 
-        <Select>
+        <Select onValueChange={onChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select" />
           </SelectTrigger>

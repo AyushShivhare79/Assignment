@@ -1,7 +1,13 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function ({ label }: { label: string }) {
+export default function ({
+  label,
+  onChange,
+}: {
+  label: string;
+  onChange: any;
+}) {
   return (
     <>
       <Label htmlFor={label}>{label}</Label>
@@ -9,6 +15,7 @@ export default function ({ label }: { label: string }) {
         id={label}
         placeholder="Type here..."
         className="h-40 rounded-xl"
+        onChange={onChange}
       />
     </>
   );
