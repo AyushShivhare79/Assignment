@@ -5,7 +5,7 @@ import { InputData } from "./components/Input";
 import Heading from "./components/Heading";
 import Select from "./components/Select";
 import TextArea from "./components/TextArea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Table,
@@ -17,32 +17,16 @@ import {
 } from "@/components/ui/table";
 
 const Dashboard = () => {
-  const [mainValue, setMainValu] = useState([{}]);
+  const [checkIn, setCheckIn] = useState([{}]);
 
-  // const [checkIn, setCheckIn] = useState([
-  //   {
-  //     adminId: "",
-  //     products: "",
-  //     usage: "",
-  //     reason: "",
-  //     description: "",
-  //     insideNumber: [{}],
-  //   },
-  // ]);
+  const [ssno, setSsno] = useState<Record<any, any>>({});
 
-  const [completeProduct, setCompleteProduct] = useState([{}]);
-
-  const [ssno, setSsno] = useState([{}]);
-
-  const [adminId, setAdminId] = useState("");
-
-  const [products, setProducts] = useState("");
-  const [productsQuantity, setProductsQuantity] = useState();
-
-  const [usage, setUsage] = useState("");
-  const [reason, setReason] = useState("");
-
-  const [description, setDescription] = useState("");
+  const [adminId, setAdminId] = useState<string>();
+  const [products, setProducts] = useState<string>();
+  const [productsQuantity, setProductsQuantity] = useState<number>();
+  const [usage, setUsage] = useState<string>();
+  const [reason, setReason] = useState<string>();
+  const [description, setDescription] = useState<string>();
 
   const handleClick = () => {
     const data = {
@@ -51,37 +35,29 @@ const Dashboard = () => {
       usage,
       reason,
       description,
-      insideNumber: [{}],
     };
-
-    // setCheckIn([...checkIn, { ...data }]);
+    setCheckIn([...checkIn, { ...data }]);
   };
-  // if(!productsQuantity)setProductsQuantity(productsQuantity - 1)
 
-  let serialNumber = Array.from({ length: Number(productsQuantity) });
+  useEffect(() => {
+    if (!productsQuantity) return;
+    let obj: Record<any, any> = {};
+    for (let i = 1; i <= Number(productsQuantity); i++) {
+      obj[i] = "";
+    }
+    setSsno(obj);
+  }, [productsQuantity]);
 
-  const [tempNumber, setTempNumber] = useState({});
-
-  // const onFieldInput = (i: any) => {
-  //   serialNumber = serialNumber.map((value, index) => {
-  //     if (index === i) {
-  //       return tempNumber;
-  //     } else {
-  //       return value;
-  //     }
-  //   });
-  //   setTempNumber(undefined);
-  //   const mergeProducts = checkIn.map((m) => ({ ...m, serialNumber }));
-  //   console.log("mergeProducts: ", mergeProducts);
-  // };
-  // console.log("CHECKIN: ", checkIn);
+  const completeProduct = checkIn.map((m) => ({ ...m, ssno }));
+  console.log("completeProduct: ", completeProduct);
 
   const onFieldInput = (i: any) => {};
-  console.log("SSNO: ", ssno);
+  useEffect(() => {
+    console.log(ssno);
+  }, [ssno]);
   const [tempValue, setTempValue] = useState();
   return (
     <>
-      {JSON.stringify(serialNumber)}
       {JSON.stringify(ssno)}
 
       <div className="flex px-14 pt-5 border">
@@ -143,31 +119,21 @@ const Dashboard = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {serialNumber.map((key, index) => (
-                <TableRow>
+              {Object.keys(ssno).map((key, index) => (
+                <TableRow key={key}>
                   <TableCell>{index}</TableCell>
                   <TableCell>
                     <input
                       type="text"
                       className="border rounded h-7"
                       placeholder="Type..."
-                      // onChange={(e: any) => setCheckIn([...tempNumber, serialNumber: e.target.value])}
-                      // onChange={(e: any) =>
-                      //   setCheckIn(
-                      //     checkIn.map((value, i) => {
-                      //       value.insideNumber.map((v, i) => {});
-                      //       return index === i ? e.target.value : value;
-                      //     })
-                      //   )
-                      // }
-
-                      onChange={(e: any) =>
-                        setSsno(
-                          ssno.map((value, i) =>
-                            i === index ? e.target.value : value
-                          )
-                        )
-                      }
+                      onChange={(e) => {
+                        setSsno((prev) => {
+                          let newObj = { ...prev };
+                          newObj[key] = e.target.value;
+                          return newObj;
+                        });
+                      }}
                     />
                     <button onClick={() => onFieldInput(index)}>Update</button>
                   </TableCell>
