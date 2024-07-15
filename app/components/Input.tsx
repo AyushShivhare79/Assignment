@@ -5,10 +5,12 @@ export function InputData({
   label,
   type,
   onChange,
+  disabled,
 }: {
   label: string;
   type: string;
   onChange: any;
+  disabled: any;
 }) {
   return (
     <>
@@ -19,6 +21,7 @@ export function InputData({
             placeholder={label}
             id="email"
             type={type}
+            disabled = {disabled}
             onChange={onChange}
           />
         </div>

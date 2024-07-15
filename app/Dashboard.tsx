@@ -28,7 +28,9 @@ const Dashboard = () => {
   const [reason, setReason] = useState<string>();
   const [description, setDescription] = useState<string>();
 
+  const [disabled, setDisabled] = useState<boolean>(false);
   const handleClick = () => {
+    setDisabled(true);
     const data = {
       adminId,
       products,
@@ -48,14 +50,17 @@ const Dashboard = () => {
     setSsno(obj);
   }, [productsQuantity]);
 
-  const completeProduct = checkIn.map((m) => ({ ...m, ssno }));
-  console.log("completeProduct: ", completeProduct);
+  const onCheckinComplete = (e: any) => {
+    e.preventDefault();
+    const completeProduct = checkIn.map((m) => ({ ...m, ssno }));
+    console.log("completeProduct: ", completeProduct);
+  };
 
-  const onFieldInput = (i: any) => {};
-  useEffect(() => {
-    console.log(ssno);
-  }, [ssno]);
-  const [tempValue, setTempValue] = useState();
+  // const onFieldInput = (i: any) => {};
+  // useEffect(() => {
+  //   console.log(ssno);
+  // }, [ssno]);
+
   return (
     <>
       {JSON.stringify(ssno)}
@@ -67,6 +72,7 @@ const Dashboard = () => {
             <InputData
               type={"string"}
               label={"Admin/ ID"}
+              disabled={disabled}
               onChange={(e: any) => setAdminId(e.target.value)}
             />
 
@@ -76,10 +82,12 @@ const Dashboard = () => {
               <Select
                 label={"Products"}
                 onChange={(e: any) => setProducts(e)}
+                disabled={disabled}
               />
               <InputData
                 type={"number"}
                 label={"Quantity"}
+                disabled={disabled}
                 onChange={(e: any) => setProductsQuantity(e.target.value)}
               />
               <Button onClick={handleClick}>Serial number</Button>
@@ -95,15 +103,21 @@ const Dashboard = () => {
               <InputData
                 type={"text"}
                 label={"Usage"}
+                disabled={disabled}
                 onChange={(e: any) => setUsage(e.target.value)}
               />
-              <Select label={"Reason"} onChange={(e: any) => setReason(e)} />
+              <Select
+                label={"Reason"}
+                onChange={(e: any) => setReason(e)}
+                disabled={disabled}
+              />
             </div>
 
             <div className="pt-5">
               <TextArea
                 label="Description"
                 onChange={(e: any) => setDescription(e.target.value)}
+                disabled={disabled}
               />
             </div>
           </div>
@@ -135,7 +149,7 @@ const Dashboard = () => {
                         });
                       }}
                     />
-                    <button onClick={() => onFieldInput(index)}>Update</button>
+                    {/* <button onClick={() => onFieldInput(index)}>Update</button> */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -143,6 +157,9 @@ const Dashboard = () => {
           </Table>
         </div>
       </div>
+      <Button className="ml-14 mt-2" onClick={onCheckinComplete}>
+        CheckIn
+      </Button>
     </>
   );
 };
