@@ -5,13 +5,11 @@ import { InputData } from "./components/Input";
 import Heading from "./components/Heading";
 import Select from "./components/Select";
 import TextArea from "./components/TextArea";
-// import Table from "./components/Table";
 import { useState } from "react";
 
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -19,55 +17,72 @@ import {
 } from "@/components/ui/table";
 
 const Dashboard = () => {
-  const [chechIn, setCheckIn] = useState([
-    {
-      adminId: "",
-      products: "",
-      usage: "",
-      reason: "",
-      description: "",
-    },
-  ]);
+  const [mainValue, setMainValu] = useState([{}]);
+
+  // const [checkIn, setCheckIn] = useState([
+  //   {
+  //     adminId: "",
+  //     products: "",
+  //     usage: "",
+  //     reason: "",
+  //     description: "",
+  //     insideNumber: [{}],
+  //   },
+  // ]);
+
+  const [completeProduct, setCompleteProduct] = useState([{}]);
+
+  const [ssno, setSsno] = useState([{}]);
 
   const [adminId, setAdminId] = useState("");
 
   const [products, setProducts] = useState("");
-  const [productsQuantity, setProductsQuantity] = useState(0);
+  const [productsQuantity, setProductsQuantity] = useState();
 
   const [usage, setUsage] = useState("");
   const [reason, setReason] = useState("");
 
-  // const [products, setProducts] = useState({
-  //   products: "",
-  //   quantity: "",
-  // });
-  // const [usage, setUsage] = useState({
-  //   usage: "",
-  //   quantity: "",
-  // });
-
   const [description, setDescription] = useState("");
 
   const handleClick = () => {
-    const data = new Array(productsQuantity).fill({
+    const data = {
       adminId,
       products,
       usage,
       reason,
       description,
-    });
-    setCheckIn([...chechIn, ...data]);
+      insideNumber: [{}],
+    };
+
+    // setCheckIn([...checkIn, { ...data }]);
   };
+  // if(!productsQuantity)setProductsQuantity(productsQuantity - 1)
+
+  let serialNumber = Array.from({ length: Number(productsQuantity) });
+
+  const [tempNumber, setTempNumber] = useState({});
+
+  // const onFieldInput = (i: any) => {
+  //   serialNumber = serialNumber.map((value, index) => {
+  //     if (index === i) {
+  //       return tempNumber;
+  //     } else {
+  //       return value;
+  //     }
+  //   });
+  //   setTempNumber(undefined);
+  //   const mergeProducts = checkIn.map((m) => ({ ...m, serialNumber }));
+  //   console.log("mergeProducts: ", mergeProducts);
+  // };
+  // console.log("CHECKIN: ", checkIn);
+
+  const onFieldInput = (i: any) => {};
+  console.log("SSNO: ", ssno);
+  const [tempValue, setTempValue] = useState();
   return (
     <>
-      {JSON.stringify(adminId)}
-      {JSON.stringify(products)}
-      {JSON.stringify(productsQuantity)}
-      {JSON.stringify(usage)}
-      {JSON.stringify(reason)}
-      {JSON.stringify(description)}
-
-      {JSON.stringify(chechIn)}
+      {JSON.stringify(serialNumber)}
+      {JSON.stringify(ssno)}
 
       <div className="flex px-14 pt-5 border">
         <div className="w-3/5 border">
@@ -128,15 +143,36 @@ const Dashboard = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                {}
+              {serialNumber.map((key, index) => (
+                <TableRow>
+                  <TableCell>{index}</TableCell>
+                  <TableCell>
+                    <input
+                      type="text"
+                      className="border rounded h-7"
+                      placeholder="Type..."
+                      // onChange={(e: any) => setCheckIn([...tempNumber, serialNumber: e.target.value])}
+                      // onChange={(e: any) =>
+                      //   setCheckIn(
+                      //     checkIn.map((value, i) => {
+                      //       value.insideNumber.map((v, i) => {});
+                      //       return index === i ? e.target.value : value;
+                      //     })
+                      //   )
+                      // }
 
-                <TableCell></TableCell>
-
-                {/* <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell> */}
-              </TableRow>
+                      onChange={(e: any) =>
+                        setSsno(
+                          ssno.map((value, i) =>
+                            i === index ? e.target.value : value
+                          )
+                        )
+                      }
+                    />
+                    <button onClick={() => onFieldInput(index)}>Update</button>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
@@ -144,12 +180,5 @@ const Dashboard = () => {
     </>
   );
 };
-export function TableComp() {
-  return (
-    <>
-      <div></div>
-    </>
-  );
-}
 
 export default Dashboard;
