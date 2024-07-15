@@ -10,16 +10,18 @@ import {
 export default function ({
   label,
   onChange,
+  disabled,
 }: {
   label: string;
   onChange: any;
+  disabled: any;
 }) {
   return (
     <>
       <div>
         <Label htmlFor="email">{label}</Label>
 
-        <Select onValueChange={onChange}>
+        <Select disabled={disabled} onValueChange={onChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select" />
           </SelectTrigger>
